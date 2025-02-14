@@ -9,7 +9,7 @@ export default function App() {
 
 
   const RootStack = createNativeStackNavigator({
-    initialRouteName: "Produit",
+    initialRouteName: "Categorie",
     screenOptions: {
       headerStyle: {
       backgroundColor: '#f4511e',

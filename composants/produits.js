@@ -1,5 +1,6 @@
 import { Text, StyleSheet, View, FlatList, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from "@react-navigation/native";
 
 const Produits = () => {
     const [produits, setProduits] = useState([]);
