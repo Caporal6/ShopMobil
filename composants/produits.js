@@ -1,14 +1,18 @@
 import { Text, StyleSheet, View, FlatList, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
 const Produits = () => {
+    const route = useRoute(); 
+    const { category } = route.params || {}; 
     const [produits, setProduits] = useState([]);
 
     const getProduits = async () => {
+        if (!category) return; 
+
         try {
             const response = await fetch(
-                "https://fakestoreapi.com/products/category/jewelery"
+                `https://fakestoreapi.com/products/category/${category}`
             );
             const data = await response.json();
             setProduits(data);
@@ -19,7 +23,7 @@ const Produits = () => {
 
     useEffect(() => {
         getProduits();
-    }, []);
+    }, [category]); 
 
     const renderItem = ({ item }) => {
         return (
