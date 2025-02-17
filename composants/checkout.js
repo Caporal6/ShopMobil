@@ -1,28 +1,45 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, Image, ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
+import { View, Text, Button, StyleSheet, Image, FlatList, Pressable } from 'react-native';
+import { useDispatch, useSelector } from "react-redux";
+import { ajouterProduit, supprimerProduit } from '../store/SliceProduits';
 
 const Checkout = () => {
+    const dispatch = useDispatch();
     const produitsPanier = useSelector((state) => state.produits.panier);
+    const total = produitsPanier.reduce((sum, produit) => sum + produit.price, 0);
+
+    const supprimer = (index) => {
+        dispatch(supprimerProduit(index));
+    };
+
+    const renderItem = ({ item, index }) => (
+        <Pressable onLongPress={() => supprimer(index)} style={styles.produit}>
+            <Image source={{ uri: item.image }} style={styles.image} />
+            <View style={styles.produitDetails}>
+                <Text style={styles.produitTitle}>{item.title}</Text>
+                <Text style={styles.produitPrice}>${item.price.toFixed(2)}</Text>
+            </View>
+        </Pressable>
+    );
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Checkout</Text>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {produitsPanier.length === 0 ? (
-                    <Text style={styles.emptyText}>Votre panier est vide</Text>
-                ) : (
-                    produitsPanier.map((produit) => (
-                        <View key={produit.id} style={styles.produit}>
-                            <Image source={{ uri: produit.image }} style={styles.image} />
-                            <View style={styles.produitDetails}>
-                                <Text style={styles.produitTitle}>{produit.title}</Text>
-                                <Text style={styles.produitPrice}>${produit.price.toFixed(2)}</Text>
-                            </View>
-                        </View>
-                    ))
-                )}
-            </ScrollView>
+            <FlatList
+                data={produitsPanier}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id.toString()}
+                contentContainerStyle={styles.scrollContainer}
+                ListEmptyComponent={
+                    <View>
+                        <Image source={require('../assets/emptyShopping.png')} style={{ width: 200, height: 200, alignSelf: 'center' }} />
+                        <Text style={styles.emptyText}>Votre panier est vide</Text>
+                    </View>
+                }
+            />
+            {produitsPanier.length > 0 && (
+                <Text style={styles.totalText}>Total: ${total.toFixed(2)}</Text>
+            )}
             <Button title="Proceed to Payment" onPress={() => alert('Payment Processed')} />
         </View>
     );
@@ -82,6 +99,13 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#888',
         marginTop: 5,
+    },
+    totalText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#333',
+        textAlign: 'center',
+        marginVertical: 20,
     },
 });
 

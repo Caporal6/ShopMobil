@@ -1,7 +1,7 @@
 import { Text, StyleSheet, View, FlatList, Image, Button } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useRoute } from "@react-navigation/native";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { ajouterProduit } from '../store/SliceProduits';
 
 const Produits = () => {
@@ -9,6 +9,7 @@ const Produits = () => {
     const { category } = route.params || {}; 
     const [produits, setProduits] = useState([]);
     const dispatch = useDispatch();
+    const produitsPanier = useSelector((state) => state.produits.panier);
 
     const getProduits = async () => {
         if (!category) return; 
@@ -29,7 +30,12 @@ const Produits = () => {
     }, [category]); 
 
     const ajouterAuPanier = (produit) => {
-        dispatch(ajouterProduit(produit));
+        const produitExistant = produitsPanier.some(item => item.id === produit.id);
+        if (!produitExistant) {
+            dispatch(ajouterProduit(produit));
+        } else {
+            alert('Ce produit est déjà dans le panier');
+        }
     };
 
     const renderItem = ({ item }) => {
