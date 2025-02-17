@@ -4,49 +4,63 @@ import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Categorie from './composants/categorie';
 import Produit from './composants/produits';
+import { Ionicons } from '@expo/vector-icons';
+import Checkout from './composants/checkout';
+import store from './store/store';
+import { Provider } from 'react-redux';
 
 export default function App() {
 
 
   const RootStack = createNativeStackNavigator({
     initialRouteName: "Categorie",
-    screenOptions: {
+    screenOptions: ({ navigation }) => ({
       headerStyle: {
-      backgroundColor: '#f4511e',
+        backgroundColor: '#f4511e',
       },
-      headerTintColor: '#fff'
-      ,
+      headerTintColor: '#fff',
       headerTitleStyle: {
-      fontWeight: 'bold'
-      ,
+        fontWeight: 'bold',
       },
-      
-      },
-      screens: {
-        Categorie: {
+      headerRight: () => (
+        <Ionicons
+          name="cart"
+          size={25}
+          color="white"
+          style={{ marginRight: 15 }}
+          onPress={() => navigation.navigate('Checkout')}
+        />
+      ),
+    }),
+    screens: {
+      Categorie: {
         screen: Categorie,
         options: {
-        title: "Categorie",
+          title: "Categorie",
         },
-        },
-        Produit: {
+      },
+      Produit: {
         screen: Produit,
         options: {
-        title: "Produit",
+          title: "Produit",
         },
-        },
-
-
-
       },
-    });
-
+      Checkout: {
+        screen: Checkout,
+        options: {
+          title: "Checkout",
+        },
+      },
+    },
+  });
 
   const Navigation = createStaticNavigation(RootStack);
 
 
   return (
+    <Provider store={store}>
       <Navigation />
+    </Provider>
   );
 }
 

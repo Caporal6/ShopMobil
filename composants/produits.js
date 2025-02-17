@@ -1,11 +1,14 @@
-import { Text, StyleSheet, View, FlatList, Image } from 'react-native';
+import { Text, StyleSheet, View, FlatList, Image, Button } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useRoute } from "@react-navigation/native";
+import { useDispatch } from 'react-redux';
+import { ajouterProduit } from '../store/SliceProduits';
 
 const Produits = () => {
     const route = useRoute(); 
     const { category } = route.params || {}; 
     const [produits, setProduits] = useState([]);
+    const dispatch = useDispatch();
 
     const getProduits = async () => {
         if (!category) return; 
@@ -25,6 +28,10 @@ const Produits = () => {
         getProduits();
     }, [category]); 
 
+    const ajouterAuPanier = (produit) => {
+        dispatch(ajouterProduit(produit));
+    };
+
     const renderItem = ({ item }) => {
         return (
             <View style={styles.carte}>
@@ -33,6 +40,7 @@ const Produits = () => {
                 <Text style={styles.prix}>${item.price.toFixed(2)}</Text>
                 <Text style={styles.description}>{item.description}</Text>
                 <Text style={styles.rating}>⭐ {item.rating.rate} ({item.rating.count} avis)</Text>
+                <Button title="Ajouter au panier" onPress={() => ajouterAuPanier(item)} />
             </View>
         );
     };
@@ -92,6 +100,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#f39c12',
         fontWeight: 'bold',
+    },
+    bouton: {
+        marginTop: 10,
     },
 });
 
