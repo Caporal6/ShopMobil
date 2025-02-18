@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, Image, FlatList, Pressable } from 'react-native';
+import { View, Text, Button, StyleSheet, Image, FlatList, Pressable, Alert } from 'react-native';
 import { useDispatch, useSelector } from "react-redux";
-import { ajouterProduit, supprimerProduit } from '../store/SliceProduits';
+import { ajouterProduit, supprimerProduit, viderPanier } from '../store/SliceProduits';
 
 const Checkout = () => {
     const dispatch = useDispatch();
@@ -10,6 +10,26 @@ const Checkout = () => {
 
     const supprimer = (index) => {
         dispatch(supprimerProduit(index));
+    };
+
+    const confirmerCommande = () => {
+        Alert.alert(
+            "Confirmation",
+            "Êtes-vous sûr de vouloir confirmer la commande?",
+            [
+                {
+                    text: "Annuler",
+                    style: "cancel"
+                },
+                {
+                    text: "Confirmer",
+                    onPress: () => {
+                        alert('Payment Processed');
+                        dispatch(viderPanier());
+                    }
+                }
+            ]
+        );
     };
 
     const renderItem = ({ item, index }) => (
@@ -40,7 +60,7 @@ const Checkout = () => {
             {produitsPanier.length > 0 && (
                 <Text style={styles.totalText}>Total: ${total.toFixed(2)}</Text>
             )}
-            <Button title="Proceed to Payment" onPress={() => alert('Payment Processed')} />
+            <Button title="Proceed to Payment" onPress={confirmerCommande} />
         </View>
     );
 };

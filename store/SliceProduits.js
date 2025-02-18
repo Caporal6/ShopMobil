@@ -12,8 +12,11 @@ const produitsSlice = createSlice({
         supprimerProduit: (state, action) => {
             state.panier.splice(action.payload, 1);
         },
+        viderPanier: (state) => {
+            state.panier = [];
+        },
     },
 });
 
-export const { ajouterProduit, supprimerProduit } = produitsSlice.actions; // Export actions
+export const { ajouterProduit, supprimerProduit, viderPanier } = produitsSlice.actions; // Export actions
 export default produitsSlice.reducer;
