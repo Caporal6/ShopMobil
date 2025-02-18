@@ -13,6 +13,11 @@ const Checkout = () => {
     };
 
     const confirmerCommande = () => {
+        if (produitsPanier.length === 0) {
+            Alert.alert('Erreur', 'Votre panier est vide.');
+            return;
+        }
+
         Alert.alert(
             "Confirmation",
             "Êtes-vous sûr de vouloir confirmer la commande?",
@@ -24,7 +29,7 @@ const Checkout = () => {
                 {
                     text: "Confirmer",
                     onPress: () => {
-                        alert('Payment Processed');
+                        Alert.alert('Succès', 'Votre commande a été confirmée et le paiement a été traité.');
                         dispatch(viderPanier());
                     }
                 }
@@ -44,7 +49,7 @@ const Checkout = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Checkout</Text>
+            <Text style={styles.title}>Caisse</Text>
             <FlatList
                 data={produitsPanier}
                 renderItem={renderItem}
@@ -60,7 +65,7 @@ const Checkout = () => {
             {produitsPanier.length > 0 && (
                 <Text style={styles.totalText}>Total: ${total.toFixed(2)}</Text>
             )}
-            <Button title="Proceed to Payment" onPress={confirmerCommande} />
+            <Button title="Procéder au paiement" onPress={confirmerCommande} />
         </View>
     );
 };
@@ -68,7 +73,7 @@ const Checkout = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#FFB6A9',
         padding: 20,
     },
     scrollContainer: {

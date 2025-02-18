@@ -65,7 +65,7 @@ const Produits = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#ff9a9e',
         padding: 10,
     },
     carte: {
