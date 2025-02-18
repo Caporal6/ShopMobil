@@ -18,5 +18,5 @@ const produitsSlice = createSlice({
     },
 });
 
-export const { ajouterProduit, supprimerProduit, viderPanier } = produitsSlice.actions; // Export actions
+export const { ajouterProduit, supprimerProduit, viderPanier } = produitsSlice.actions;
 export default produitsSlice.reducer;
